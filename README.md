@@ -11,7 +11,7 @@ docker push quay.io/redhat-developer/jenkins-operator-bundle:v0.5.0
 2. Build the Index image
 
 ```
-opm index add --bundles  quay.io/redhat-developer/jenkins-operator-bundle:v0.0.5 --tag quay.io/redhat-developer/jenkins-operator-index:v0.5.0 --build-tool=docker
+opm index add --bundles  quay.io/redhat-developer/jenkins-operator-bundle:v0.5.0 --tag quay.io/redhat-developer/jenkins-operator-index:v0.5.0 --build-tool=docker
 docker push quay.io/redhat-developer/jenkins-operator-index:v0.5.0
 ```
 
