@@ -103,12 +103,12 @@ metadata:
     capabilities: Basic Install
     categories: Developer Tools
     certified: "true"
-    containerImage:  quay.io/redhat-developer/openshift-jenkins-operator:latest
+    containerImage: OPERATOR_REPOSITORY/OPERATOR_IMAGE_NAME:OPERATOR_IMAGE_VERSION
     description: >-
       Kubernetes native operator which fully manages Jenkins on Openshift.
     repository: https://github.com/redhat-developer/jenkins-operator
     support: Red Hat
-  name: jenkins-operator.v0.5.0
+  name: jenkins-operator.latest
   namespace: placeholder
 spec:
   apiservicedefinitions: {}
@@ -222,7 +222,7 @@ spec:
                       fieldPath: metadata.name
                 - name: OPERATOR_NAME
                   value: jenkins-operator
-                image:  quay.io/redhat-developer/openshift-jenkins-operator:latest
+                image: OPERATOR_REPOSITORY/OPERATOR_IMAGE_NAME:OPERATOR_IMAGE_VERSION
                 imagePullPolicy: IfNotPresent
                 name: jenkins-operator
                 resources: {}
@@ -394,4 +394,4 @@ spec:
   provider:
     name: Red Hat
   selector: {}
-  version: 0.5.0
+  version: OPERATOR_VERSION
