@@ -25,7 +25,7 @@ WORKDIR /tmp
 RUN mkdir -p $GOPATH/bin &&  mkdir -p /tmp/goroot
 RUN echo $GO_DOWNLOAD_SITE/$GO_DIST
 RUN curl -Lo $GO_DIST $GO_DOWNLOAD_SITE/$GO_DIST && tar -C /tmp/goroot -xzf $GO_DIST
-RUN curl -Lo opm $KUBECTL_DOWNLOAD_SITE/$KUBECTL_VERSION/linux-amd64-opm && chmod +x opm && mv opm $GOPATH/bin/
+RUN curl -Lo opm $OPM_DOWNLOAD_SITE/$OPM_VERSION/linux-amd64-opm && chmod +x opm && mv opm $GOPATH/bin/
 RUN curl -Lo operator-sdk $OPERATOR_SDK_DOWNLOAD_SITE/$OPERATOR_SDK_VERSION/$OPERATOR_SDK_DIST && chmod +x operator-sdk && mv operator-sdk $GOPATH/bin/
 
 RUN yum -y install --nodocs git make gcc 
