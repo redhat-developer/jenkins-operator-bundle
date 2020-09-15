@@ -32,3 +32,9 @@ build:
 	docker push $(OPERATOR_REPOSITORY)/$(OPERATOR_IMAGE_NAME)-bundle:$(OPERATOR_BUNDLE_VERSION)
 	opm index add --bundles  $(OPERATOR_REPOSITORY)/$(OPERATOR_IMAGE_NAME)-bundle:$(OPERATOR_BUNDLE_VERSION) --tag $(OPERATOR_REPOSITORY)/$(OPERATOR_IMAGE_NAME)-index:$(OPERATOR_BUNDLE_VERSION) --build-tool=docker
 	docker push $(OPERATOR_REPOSITORY)/$(OPERATOR_IMAGE_NAME)-index:$(OPERATOR_BUNDLE_VERSION)
+
+.PHONY: test-bundle-install
+## Runs smoke tests to verify the bundle install
+test-bundle-install:
+	@echo "Testing the new operator bundle install" 
+	@./test-bundle-install.sh
