@@ -2,4 +2,4 @@ cluster
 out
 .history
 .kube
-smoke/features/steps/__pycache__
+smoke-tests/features/steps/__pycache__

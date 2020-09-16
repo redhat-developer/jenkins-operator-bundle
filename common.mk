@@ -1,7 +1,0 @@
-OPERATOR_VERSION := 0.0.0
-OPERATOR_IMAGE_NAME := openshift-jenkins-operator
-OPERATOR_IMAGE_VERSION := 0.0.0
-OPERATOR_REPOSITORY := quay.io/redhat-developer
-OPERATOR_BUNDLE_VERSION := 0.0.0
-
-
