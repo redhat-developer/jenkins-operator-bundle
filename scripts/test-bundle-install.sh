@@ -23,9 +23,9 @@ echo "Assigning value to varibale TEST_NAMESPACE:"${TEST_NAMESPACE}
 echo "Starting cleanup"
 kubectl delete namespace ${TEST_NAMESPACE} --timeout=45s --wait
 kubectl create namespace ${TEST_NAMESPACE}
-mkdir -p ${LOGS_DIR}/smoke
-mkdir -p ${OUTPUT_DIR}/smoke-tests
-export TEST_SMOKE_OUTPUT_DIR=${OUTPUT_DIR}/smoke-tests
+mkdir -p ${LOGS_DIR}/smoke-tests-logs
+mkdir -p ${OUTPUT_DIR}/smoke-tests-output
+export TEST_SMOKE_OUTPUT_DIR=${OUTPUT_DIR}/smoke
 echo "Logs directory created at "{$LOGS_DIR/smoke}
 
 # -- Set namespace for subscription.yaml & operator-group.yaml file , set the TEST_NAMESPACE as current project
@@ -38,7 +38,7 @@ oc project ${TEST_NAMESPACE}
 
 # -- Trigger the test
 echo "Starting local Jenkins instance"
-${PYTHON_VENV_DIR}/bin/pip install -q -r requirements.txt
+${PYTHON_VENV_DIR}/bin/pip install -q -r smoke/requirements.txt
 echo "Running smoke tests"
 TEST_NAMESPACE=${TEST_NAMESPACE}
 ${PYTHON_VENV_DIR}/bin/behave --junit --junit-directory ${TEST_SMOKE_OUTPUT_DIR} --no-capture --no-capture-stderr smoke/features

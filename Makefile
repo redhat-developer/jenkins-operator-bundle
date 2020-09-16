@@ -19,7 +19,7 @@ build: prepare
 	@echo "Building bundle"
 	@./scripts/build.sh
 
-.PHONY: test-bundle-install  ## Runs smoke tests to verify the bundle install
-test-bundle-install:
+.PHONY: smoke  ## Runs smoke tests to verify the bundle install
+smoke:
 	@echo "Testing the new operator bundle install" 
 	@./scripts/test-bundle-install.sh
