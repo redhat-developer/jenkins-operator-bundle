@@ -108,7 +108,7 @@ metadata:
       Kubernetes native operator which fully manages Jenkins on Openshift.
     repository: https://github.com/redhat-developer/jenkins-operator
     support: Red Hat
-  name: jenkins-operator.latest
+  name: jenkins-operator.OPERATOR_IMAGE_VERSION
   namespace: placeholder
 spec:
   apiservicedefinitions: {}
