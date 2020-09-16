@@ -14,7 +14,7 @@ ENV GO_DIST=go$GO_VERSION.linux-amd64.tar.gz
 # Operator SDK
 ENV OPERATOR_SDK_VERSION=v0.18.0 
 ENV OPERATOR_SDK_DOWNLOAD_SITE=https://github.com/operator-framework/operator-sdk/releases/download/ 
-ENV OPERATOR_SDK_DIST=operator-sdk-OPERATOR_SDK_VERSION-x86_64-linux-gnu
+ENV OPERATOR_SDK_DIST=operator-sdk-$OPERATOR_SDK_VERSION-x86_64-linux-gnu
 
 # Opm
 ENV OPM_VERSION=v1.13.8
