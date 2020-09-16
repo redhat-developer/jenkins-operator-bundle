@@ -1,40 +1,25 @@
-include common.mk
+.PHONY: default
+default: build ;
 
-OSFLAG :=
-UNAME_S := $(shell uname -s)
-ifeq ($(UNAME_S),Linux)
-	OSFLAG = LINUX
-endif
-ifeq ($(UNAME_S),Darwin)
-	OSFLAG = OSX
-endif
+
+
+export OPERATOR_VERSION = 0.0.0
+export OPERATOR_IMAGE_NAME = openshift-jenkins-operator
+export OPERATOR_IMAGE_VERSION = 0.0.0
+export OPERATOR_REPOSITORY = quay.io/redhat-developer
+export OPERATOR_BUNDLE_VERSION = 0.0.0
 
 .PHONY: prepare
 prepare:
-ifeq ($(OSFLAG), OSX)
-	cp template/jenkins-operator.version.clusterserviceversion.yaml manifests/jenkins-operator.$(OPERATOR_VERSION).clusterserviceversion.yaml	
-	sed -i '' 's|OPERATOR_VERSION|$(OPERATOR_VERSION)|g' manifests/jenkins-operator.$(OPERATOR_VERSION).clusterserviceversion.yaml
-	sed -i '' 's|OPERATOR_REPOSITORY|$(OPERATOR_REPOSITORY)|g' manifests/jenkins-operator.$(OPERATOR_VERSION).clusterserviceversion.yaml
-	sed -i '' 's|OPERATOR_IMAGE_NAME|$(OPERATOR_IMAGE_NAME)|g' manifests/jenkins-operator.$(OPERATOR_VERSION).clusterserviceversion.yaml
-	sed -i '' 's|OPERATOR_IMAGE_VERSION|$(OPERATOR_IMAGE_VERSION)|g' manifests/jenkins-operator.$(OPERATOR_VERSION).clusterserviceversion.yaml	
-else
-	cp template/jenkins-operator.version.clusterserviceversion.yaml manifests/jenkins-operator.$(OPERATOR_VERSION).clusterserviceversion.yaml
-	sed -i 's|OPERATOR_VERSION|$(OPERATOR_VERSION)|g' manifests/jenkins-operator.$(OPERATOR_VERSION).clusterserviceversion.yaml
-	sed -i 's|OPERATOR_REPOSITORY|$(OPERATOR_REPOSITORY)|g' manifests/jenkins-operator.$(OPERATOR_VERSION).clusterserviceversion.yaml
-	sed -i 's|OPERATOR_IMAGE_NAME|$(OPERATOR_IMAGE_NAME)|g' manifests/jenkins-operator.$(OPERATOR_VERSION).clusterserviceversion.yaml
-	sed -i 's|OPERATOR_IMAGE_VERSION|$(OPERATOR_IMAGE_VERSION)|g' manifests/jenkins-operator.$(OPERATOR_VERSION).clusterserviceversion.yaml
-endif
+	@echo "Preparing bundle manifests"
+	@./scripts/prepare.sh
 
 .PHONY: build
-build:
-	@echo "+ $@"
-	operator-sdk bundle create --directory . $(OPERATOR_REPOSITORY)/$(OPERATOR_IMAGE_NAME)-bundle:$(OPERATOR_BUNDLE_VERSION)
-	docker push $(OPERATOR_REPOSITORY)/$(OPERATOR_IMAGE_NAME)-bundle:$(OPERATOR_BUNDLE_VERSION)
-	opm index add --bundles  $(OPERATOR_REPOSITORY)/$(OPERATOR_IMAGE_NAME)-bundle:$(OPERATOR_BUNDLE_VERSION) --tag $(OPERATOR_REPOSITORY)/$(OPERATOR_IMAGE_NAME)-index:$(OPERATOR_BUNDLE_VERSION) --build-tool=docker
-	docker push $(OPERATOR_REPOSITORY)/$(OPERATOR_IMAGE_NAME)-index:$(OPERATOR_BUNDLE_VERSION)
+build: prepare
+	@echo "Building bundle"
+	@./scripts/build.sh
 
-.PHONY: test-bundle-install
-## Runs smoke tests to verify the bundle install
+.PHONY: test-bundle-install  ## Runs smoke tests to verify the bundle install
 test-bundle-install:
 	@echo "Testing the new operator bundle install" 
-	@./test-bundle-install.sh
+	@./scripts/test-bundle-install.sh
