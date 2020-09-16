@@ -16,9 +16,10 @@ If we need to install an operator manually using the cli
 '''
 
 # Path to the yaml files
+scripts_dir = os.getenv('OUTPUT_DIR')
 catalogsource = './smoke/samples/catalog-source.yaml'
-operatorgroup = './smoke/samples/operator-group.yaml'
-subscription = './smoke/samples/subscription.yaml'
+operatorgroup = os.path.join(scripts_dir,'operator-group.yaml')
+subscription = os.path.join(scripts_dir,'subscription.yaml')
 
 # variables needed to get the resource status
 current_project = ''
