@@ -28,9 +28,7 @@ endif
 .PHONY: build
 build:
 	@echo "+ $@"
-	/tmp/go/bin/operator-sdk version
-	ls .
-	/tmp/go/bin/operator-sdk bundle create --directory . $(OPERATOR_REPOSITORY)/$(OPERATOR_IMAGE_NAME)-bundle:$(OPERATOR_BUNDLE_VERSION)
+	operator-sdk bundle create --directory . $(OPERATOR_REPOSITORY)/$(OPERATOR_IMAGE_NAME)-bundle:$(OPERATOR_BUNDLE_VERSION)
 	docker push $(OPERATOR_REPOSITORY)/$(OPERATOR_IMAGE_NAME)-bundle:$(OPERATOR_BUNDLE_VERSION)
-	/tmp/go/bin/opm index add --bundles  $(OPERATOR_REPOSITORY)/$(OPERATOR_IMAGE_NAME)-bundle:$(OPERATOR_BUNDLE_VERSION) --tag $(OPERATOR_REPOSITORY)/$(OPERATOR_IMAGE_NAME)-index:$(OPERATOR_BUNDLE_VERSION) --build-tool=docker
+	opm index add --bundles  $(OPERATOR_REPOSITORY)/$(OPERATOR_IMAGE_NAME)-bundle:$(OPERATOR_BUNDLE_VERSION) --tag $(OPERATOR_REPOSITORY)/$(OPERATOR_IMAGE_NAME)-index:$(OPERATOR_BUNDLE_VERSION) --build-tool=docker
 	docker push $(OPERATOR_REPOSITORY)/$(OPERATOR_IMAGE_NAME)-index:$(OPERATOR_BUNDLE_VERSION)
