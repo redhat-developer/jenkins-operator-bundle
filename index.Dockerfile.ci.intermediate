@@ -1,15 +1,1 @@
-FROM quay.io/operator-framework/upstream-registry-builder
-
-# 0.0.0 points to the templated manifests for CI
-ARG OPERATOR_VERSION_NEXT=0.0.0
-ARG REG_URL=registry.svc.ci.openshift.org
-
-RUN mkdir -p /tmp/manifests
-COPY manifests/jenkins-operator/"${OPERATOR_VERSION_NEXT}" /tmp/manifests/
-
-# Replace template vars when in CI
-RUN find /tmp/manifests/ -type f -exec sed -i "s|IMAGE_REGISTRY/OPERATOR_IMAGE:IMAGE_TAG|${REG_URL}/quay.io/redhat-developer/jenkins-operator-bundle:0.0.0|g" {} \; || :
-
-# Build index database
-RUN pwd
-RUN /bin/initializer -m /tmp/manifests -o ./index.db
+openshift-ci/index.Dockerfile.ci.intermediate
