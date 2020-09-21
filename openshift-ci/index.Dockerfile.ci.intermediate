@@ -11,5 +11,6 @@ COPY manifests/jenkins-operator/"${OPERATOR_VERSION_NEXT}" /tmp/manifests/
 RUN find /tmp/manifests/ -type f -exec sed -i "s|IMAGE_REGISTRY/OPERATOR_IMAGE:IMAGE_TAG|${REG_URL}:${OPERATOR_VERSION_NEXT}|g" {} \; || :
 
 # Build index database
+RUN pwd
 RUN ls -laR /tmp/manifests
 RUN /bin/initializer -m /tmp/manifests -o ./index.db

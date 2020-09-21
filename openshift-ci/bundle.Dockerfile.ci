@@ -1,5 +1,7 @@
 FROM scratch
-COPY ./manifests /manifests
+
+# Will be injected from openshift-ci
+COPY /tmp/manifests/ /
 COPY ./metadata/annotations.yaml /metadata/annotations.yaml
 
 LABEL com.redhat.delivery.operator.bundle=true
