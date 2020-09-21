@@ -5,4 +5,3 @@ Build the Bundle image ( operator + OLM manifests )
 ```
 make build
 ```
-
