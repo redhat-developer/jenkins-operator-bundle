@@ -21,6 +21,8 @@ build: prepare	## Builds the bundle after preparing the masifests
 	@echo "Building bundle"
 	@./scripts/build.sh
 
-smoke:	## Runs smoke tests to verify the bundle install
+smoke: FORCE ## Runs smoke tests to verify the bundle install
 	@echo "Testing the new operator bundle install" 
 	@./scripts/test-bundle-install.sh
+
+FORCE:
