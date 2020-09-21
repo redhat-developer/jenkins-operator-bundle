@@ -1,18 +1,7 @@
-## Re-build and Deploy
+## Operator Bundle for OpenShift Jenkins Operator
 
-
-1. Build the Bundle image ( operator + OLM manifests )
-
-```
-operator-sdk bundle create --directory . quay.io/redhat-developer/jenkins-operator-bundle:v0.5.0
-docker push quay.io/redhat-developer/jenkins-operator-bundle:v0.5.0
-```
-
-2. Build the Index image
+Build the Bundle image ( operator + OLM manifests )
 
 ```
-opm index add --bundles  quay.io/redhat-developer/jenkins-operator-bundle:v0.5.0 --tag quay.io/redhat-developer/jenkins-operator-index:v0.5.0 --build-tool=docker
-docker push quay.io/redhat-developer/jenkins-operator-index:v0.5.0
+make build
 ```
-
-The Index image powers the listing of the Operator on OperatorHub.
