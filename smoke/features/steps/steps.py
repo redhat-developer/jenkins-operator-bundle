@@ -1,6 +1,7 @@
 import os
 import time
 import logging
+import urllib3
 from behave import given, when, then
 from datetime import date
 from pyshould import should
@@ -20,7 +21,7 @@ scripts_dir = os.getenv('OUTPUT_DIR')
 catalogsource = './smoke/samples/catalog-source.yaml'
 operatorgroup = os.path.join(scripts_dir,'operator-group.yaml')
 subscription = os.path.join(scripts_dir,'subscription.yaml')
-
+jenkins = os.path.join(scripts_dir,'jenkins.yaml')
 # variables needed to get the resource status
 current_project = ''
 config.load_kube_config()
@@ -130,3 +131,30 @@ def verifyoperatorpod(context):
             print(podStatus[pod])
         else:
             raise AssertionError
+
+@given(u'we jenkins operator is installed')
+def verifyoperator(context):
+    verifyoperatorpod(context)
+    
+
+@when(u'we create the jenkins instance using jenkins.yaml')
+def createinstance(context):
+    res = oc.oc_create_from_yaml(jenkins)
+    print(res)
+
+
+@then(u'We check for the jenkins-example pod status')
+def checkjenkinspod(context):
+    verifyoperatorpod(context)
+
+@then(u'We check for the route')
+def checkroute(context):
+    operator_name = 'jenkins-example'
+    time.sleep(30)
+    route = oc.get_route_host(operator_name,current_project)
+    url = 'http://'+str(route)
+    print('--->App url:')
+    print(url)
+    
+    if len(url) <= 0:
+        raise AssertionError
