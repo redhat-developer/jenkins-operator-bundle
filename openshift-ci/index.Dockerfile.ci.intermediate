@@ -2,7 +2,7 @@ FROM quay.io/operator-framework/upstream-registry-builder
 
 # 0.0.0 points to the templated manifests for CI
 ARG OPERATOR_VERSION_NEXT=0.0.0
-ARG REG_URL=quay.io/redhat-developer/openshift-jenkins-operator-bundle
+ARG REG_URL=quay.io/redhat-developer/openshift-jenkins-operator
 
 RUN mkdir -p /tmp/manifests
 COPY manifests/jenkins-operator/"${OPERATOR_VERSION_NEXT}" /tmp/manifests/
