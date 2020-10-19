@@ -143,10 +143,6 @@ spec:
       version: v1alpha2
       name: jenkinsimages.jenkins.io
       displayName: "Jenkins Image"
-    - kind: Casc
-      version: v1alpha3
-      name: cascs.jenkins.io
-      displayName: "Jenkins Configuration as Code"
 
   description: |+
     ##What's the Jenkins Operator?
