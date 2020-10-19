@@ -1,0 +1,4 @@
+packageName: jenkins-operator
+channels:
+- name: "4.7"
+  currentCSV: jenkins-operator.0.6.0
