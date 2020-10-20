@@ -1,6 +1,6 @@
 include scripts/colors.mk
 
-export OPERATOR_VERSION = 0.6.0-a89deb08
+export OPERATOR_VERSION = 00.6.0-388aa081
 export OPERATOR_IMAGE_NAME = openshift-jenkins-operator
 export OPERATOR_IMAGE_VERSION = 0.6.0
 export OPERATOR_REPOSITORY = quay.io/redhat-developer
