@@ -22,5 +22,5 @@ LABEL io.k8s.display-name="Jenkins Operator bundle"
 LABEL description="Jenkins Operator bundle for Jenkins Operator"
 
 # Will be injected from openshift-ci
-COPY manifests/openshift-jenkins-operator/"${OPERATOR_BUNDLE_VERSION}"/* /
+COPY manifests/jenkins-operator/"${OPERATOR_BUNDLE_VERSION}"/* /
 # As openshift-ci cannot build from scratch we trim down the image
