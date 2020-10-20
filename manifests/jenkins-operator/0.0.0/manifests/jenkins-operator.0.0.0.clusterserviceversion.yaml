@@ -206,7 +206,7 @@ spec:
             spec:
               containers:
               - command:
-                - jenkins-operator
+                - /manager
                 env:
                 - name: WATCH_NAMESPACE
                   valueFrom:
