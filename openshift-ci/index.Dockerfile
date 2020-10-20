@@ -18,10 +18,10 @@ RUN /bin/initializer -m /tmp/manifests -o ./index.db
 
 FROM quay.io/operator-framework/upstream-opm-builder
 
+LABEL operators.operatorframework.io.index.database.v1=/database/index.db
+
 COPY --from=builder ./index.db /database/index.db
 
 EXPOSE 50051
 ENTRYPOINT ["/bin/opm"]
 CMD ["registry", "serve", "--database", "/database/index.db"]
-
-LABEL operators.operatorframework.io.index.database.v1=/database/index.db
