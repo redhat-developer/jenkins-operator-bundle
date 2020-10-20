@@ -27,8 +27,8 @@ smoke: FORCE ## Runs smoke tests to verify the bundle install
 	@echo "Testing the new operator bundle install" 
 	@./scripts/test-bundle-install.sh
 
-.PHONY: container-build-index
-container-build-index:
-	docker build --build-arg OPERATOR_VERSION_NEXT=$(OPERATOR_VERSION) -f openshift-ci/index.Dockerfile -t $(OPERATOR_REPOSITORY)/$(OPERATOR_INDEX_IMAGE):$(OPERATOR_INDEX_VERSION) .
+index:
+	@echo "Preparing index image"
+	@./scripts/index.sh
 
 FORCE:
