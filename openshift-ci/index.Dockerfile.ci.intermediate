@@ -5,7 +5,7 @@ ARG OPERATOR_VERSION_NEXT=0.0.0
 ARG REG_URL=quay.io/redhat-developer/openshift-jenkins-operator
 
 RUN mkdir -p /tmp/manifests
-COPY manifests/jenkins-operator/"${OPERATOR_VERSION_NEXT}" /tmp/manifests/
+COPY manifests/jenkins-operator/"${OPERATOR_VERSION_NEXT}"/* /tmp/manifests/
 
 # Replace template vars when in CI
 RUN find /tmp/manifests/ -type f -exec sed -i "s|IMAGE_REGISTRY/OPERATOR_IMAGE:IMAGE_TAG|${REG_URL}:${OPERATOR_VERSION_NEXT}|g" {} \; || :
