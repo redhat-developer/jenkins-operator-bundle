@@ -143,6 +143,11 @@ spec:
       version: v1alpha2
       name: jenkinsimages.jenkins.io
       displayName: "Jenkins Image"
+    - description: BackupWorker is the Schema for the backupworkers API
+      displayName: Backup Worker
+      kind: BackupWorker
+      name: backupworkers.jenkins.io
+      version: v1alpha2
   description: |+
     ##What's the Jenkins Operator?
 
