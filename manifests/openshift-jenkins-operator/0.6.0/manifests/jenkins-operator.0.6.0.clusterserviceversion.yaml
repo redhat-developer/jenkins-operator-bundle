@@ -262,6 +262,8 @@ spec:
             - update
             - list
             - watch
+            - delete
+            - patch
         - apiGroups:
             - apps
           resources:
@@ -297,6 +299,10 @@ spec:
             - get
             - list
             - watch
+            - create
+            - update
+            - delete
+            - patch
         - apiGroups:
             - ""
           resources:
@@ -343,6 +349,10 @@ spec:
             - get
             - list
             - watch
+            - create
+            - update
+            - patch
+            - delete
         - apiGroups:
             - "build.openshift.io"
           resources:
@@ -352,6 +362,10 @@ spec:
             - get
             - list
             - watch
+            - create
+            - update
+            - patch
+            - delete
         - apiGroups:
             - "route.openshift.io"
           resources:
