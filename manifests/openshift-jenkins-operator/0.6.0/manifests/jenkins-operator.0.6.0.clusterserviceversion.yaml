@@ -18,16 +18,10 @@ metadata:
             "makeBackupBeforePodDeletion": false
           },
           "configurationAsCode": {
-            "configurations": null,
-            "secret": {
-              "name": ""
-            }
-          },
-          "groovyScripts": {
-            "configurations": null,
-            "secret": {
-              "name": ""
-            }
+            "enabled": true
+            "defaultConfig": true
+            "enableAutoReload": true
+            "configurations": [],
           },
           "clusterRoles": [
             {
