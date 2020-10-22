@@ -18,9 +18,9 @@ metadata:
             "makeBackupBeforePodDeletion": false
           },
           "configurationAsCode": {
-            "enabled": true
-            "defaultConfig": true
-            "enableAutoReload": true
+            "enabled": true,
+            "defaultConfig": true,
+            "enableAutoReload": true,
             "configurations": [],
           },
           "clusterRoles": [
