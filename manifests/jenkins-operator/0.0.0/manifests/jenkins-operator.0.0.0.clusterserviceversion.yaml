@@ -253,11 +253,7 @@ spec:
             - persistentvolumes
             - limitranges
           verbs:
-            - get
-            - create
-            - update
-            - list
-            - watch
+            - '*'
         - apiGroups:
             - apps
           resources:
@@ -290,9 +286,7 @@ spec:
           resources:
             - pods/log
           verbs:
-            - get
-            - list
-            - watch
+            - '*'
         - apiGroups:
             - ""
           resources:
@@ -336,18 +330,14 @@ spec:
           resources:
             - imagestreams
           verbs:
-            - get
-            - list
-            - watch
+            - '*'
         - apiGroups:
             - "build.openshift.io"
           resources:
             - builds
             - buildconfigs
           verbs:
-            - get
-            - list
-            - watch
+            - '*'
         - apiGroups:
             - "route.openshift.io"
           resources:
