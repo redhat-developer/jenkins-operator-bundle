@@ -2,6 +2,7 @@ apiVersion: operators.coreos.com/v1alpha1
 kind: ClusterServiceVersion
 metadata:
   annotations:
+    operators.openshift.io/infrastructure-features: '["Disconnected"]'
     alm-examples: |-
       [{
         "apiVersion": "jenkins.io/v1alpha2",
@@ -111,6 +112,13 @@ metadata:
   name: jenkins-operator.0.0.0
   namespace: placeholder
 spec:
+  relatedImages:
+    - name: jenkins-operator
+      image: quay.io/redhat-developer/openshift-jenkins-operator@sha256:bc745b2d8d9e189ac4dc4387b01dc2471574272189a3f67db836d83561332cea
+    - name: jenkins-image
+      image: registry.redhat.io/openshift4/ose-jenkins@sha256:0f28b84725a89504ffd3695ad4c2928e4235643b6135021a9b147f039ef943f3
+    - name: jenkins-kubernetes-sidecar
+      image: quay.io/redhat-developer/jenkins-kubernetes-sidecar@sha256:590f088f15cc0c010d1730d68780bba3cee692b9c07d9322aa758f733ba08977
   apiservicedefinitions: {}
   customresourcedefinitions:
     owned:
@@ -143,6 +151,26 @@ spec:
       version: v1alpha2
       name: jenkinsimages.jenkins.io
       displayName: "Jenkins Image"
+    - description: BackupWorker is the Schema for the backupworkers API
+      displayName: Backup Worker
+      kind: BackupWorker
+      name: backupworkers.jenkins.io
+      version: v1alpha2
+    - description: Backup is the Schema for the backup API
+      displayName: Backup
+      kind: Backup
+      name: backups.jenkins.io
+      version: v1alpha2
+    - description: BackupConfig is the Schema for the backup config API
+      displayName: BackupConfig
+      kind: BackupConfig
+      name: backupconfigs.jenkins.io
+      version: v1alpha2
+    - description: Restore is the Schema for the restore API
+      displayName: Restore
+      kind: Restore
+      name: restores.jenkins.io
+      version: v1alpha2
 
   description: |+
     ##What's the Jenkins Operator?
@@ -218,6 +246,10 @@ spec:
                       fieldPath: metadata.name
                 - name: OPERATOR_NAME
                   value: jenkins-operator
+                - name: DEFAULT_JENKINS_IMAGE
+                  value: registry.redhat.io/openshift4/ose-jenkins@sha256:0f28b84725a89504ffd3695ad4c2928e4235643b6135021a9b147f039ef943f3
+                - name: JENKINS_SIDECAR_IMAGE
+                  value: quay.io/redhat-developer/jenkins-kubernetes-sidecar@sha256:590f088f15cc0c010d1730d68780bba3cee692b9c07d9322aa758f733ba08977
                 image: quay.io/redhat-developer/openshift-jenkins-operator:0.0.0
                 imagePullPolicy: IfNotPresent
                 name: jenkins-operator
