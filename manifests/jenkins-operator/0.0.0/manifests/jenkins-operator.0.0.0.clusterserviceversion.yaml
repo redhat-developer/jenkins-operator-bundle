@@ -117,6 +117,8 @@ spec:
       image: quay.io/redhat-developer/openshift-jenkins-operator@sha256:bc745b2d8d9e189ac4dc4387b01dc2471574272189a3f67db836d83561332cea
     - name: jenkins-image
       image: registry.redhat.io/openshift4/ose-jenkins@sha256:0f28b84725a89504ffd3695ad4c2928e4235643b6135021a9b147f039ef943f3
+    - name: jenkins-image-builder
+      image: quay.io/redhat-developer/openshift-jenkins-image-builder@sha256:473d6dfb011c69f32192e668d86a47c0235791e7e857c870ad70c5e86ec07e8c
     - name: jenkins-kubernetes-sidecar
       image: quay.io/redhat-developer/jenkins-kubernetes-sidecar@sha256:590f088f15cc0c010d1730d68780bba3cee692b9c07d9322aa758f733ba08977
   apiservicedefinitions: {}
@@ -250,6 +252,8 @@ spec:
                   value: registry.redhat.io/openshift4/ose-jenkins@sha256:0f28b84725a89504ffd3695ad4c2928e4235643b6135021a9b147f039ef943f3
                 - name: JENKINS_SIDECAR_IMAGE
                   value: quay.io/redhat-developer/jenkins-kubernetes-sidecar@sha256:590f088f15cc0c010d1730d68780bba3cee692b9c07d9322aa758f733ba08977
+                - name: JENKINS_IMAGE_BUILDER_NAME
+                  value: quay.io/redhat-developer/openshift-jenkins-image-builder@sha256:473d6dfb011c69f32192e668d86a47c0235791e7e857c870ad70c5e86ec07e8c
                 image: quay.io/redhat-developer/openshift-jenkins-operator:0.0.0
                 imagePullPolicy: IfNotPresent
                 name: jenkins-operator
