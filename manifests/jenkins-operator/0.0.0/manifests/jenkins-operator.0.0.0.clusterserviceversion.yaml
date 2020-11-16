@@ -125,7 +125,7 @@ spec:
   customresourcedefinitions:
     owned:
     - description: |+
-        Jenkins custom resource allows creation of Jenkins instances preconfigure for OpenShift.
+        Jenkins custom resource allows creation of Jenkins instances preconfigured for OpenShift.
       displayName: "Jenkins"
       kind: Jenkins
       name: jenkins.jenkins.io
@@ -158,17 +158,17 @@ spec:
       kind: BackupWorker
       name: backupworkers.jenkins.io
       version: v1alpha2
-    - description: Backup is the Schema for the backup API
+    - description: Backup represents an performed backup by the Jenkins Operator
       displayName: Backup
       kind: Backup
       name: backups.jenkins.io
       version: v1alpha2
-    - description: BackupConfig is the Schema for the backup config API
+    - description: BackupConfig specifies back configuration policy
       displayName: BackupConfig
       kind: BackupConfig
       name: backupconfigs.jenkins.io
       version: v1alpha2
-    - description: Restore is the Schema for the restore API
+    - description: Create a Restore object referencing a Backup when you want the Jenkins Operator to restore previously saved data.
       displayName: Restore
       kind: Restore
       name: restores.jenkins.io
@@ -183,7 +183,6 @@ spec:
 
     Out of the box it provides:
 
-
     - Integration with Kubernetes
 
     - Pipelines as code
@@ -191,27 +190,6 @@ spec:
     - Extensibility via groovy scripts or configuration as code plugin
 
     - Security and hardening
-
-    - Problem statement and goals
-
-    The main reason why we decided to implement the Jenkins Operator is the fact that we faced a lot of problems with standard Jenkins deployment. We want to make Jenkins more robust, suitable for dynamic and multi-tenant environments.
-
-
-    Some of the problems we want to solve:
-
-    - Installing plugins with incompatible versions or security vulnerabilities
-
-    - Better configuration as code
-
-    - Lack of end to end tests
-
-    - Handle graceful shutdown properly
-
-    - Security and hardening out of the box
-
-    - Orphaned jobs with no jnlp connection
-
-    - Make errors more visible for end users
 
     - Backup and restore for jobs history
 
