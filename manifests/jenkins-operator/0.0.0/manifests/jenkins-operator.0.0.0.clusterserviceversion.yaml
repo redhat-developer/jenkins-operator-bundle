@@ -121,6 +121,8 @@ spec:
       image: quay.io/redhat-developer/openshift-jenkins-image-builder@sha256:473d6dfb011c69f32192e668d86a47c0235791e7e857c870ad70c5e86ec07e8c
     - name: jenkins-kubernetes-sidecar
       image: quay.io/redhat-developer/jenkins-kubernetes-sidecar@sha256:590f088f15cc0c010d1730d68780bba3cee692b9c07d9322aa758f733ba08977
+    - name: jenkins-backup-image
+      image: registry.redhat.io/ubi8/ubi-minimal@sha256:c6473956faa4985a41776701993718eb27ab933078bf579768e8ca7d967459ee
   apiservicedefinitions: {}
   customresourcedefinitions:
     owned:
@@ -232,6 +234,8 @@ spec:
                   value: quay.io/redhat-developer/jenkins-kubernetes-sidecar@sha256:590f088f15cc0c010d1730d68780bba3cee692b9c07d9322aa758f733ba08977
                 - name: JENKINS_IMAGE_BUILDER_NAME
                   value: quay.io/redhat-developer/openshift-jenkins-image-builder@sha256:473d6dfb011c69f32192e668d86a47c0235791e7e857c870ad70c5e86ec07e8c
+                - name: JENKINS_BACKUP_IMAGE
+                  value: registry.redhat.io/ubi8/ubi-minimal@sha256:c6473956faa4985a41776701993718eb27ab933078bf579768e8ca7d967459ee
                 image: quay.io/redhat-developer/openshift-jenkins-operator:0.0.0
                 imagePullPolicy: IfNotPresent
                 name: jenkins-operator
