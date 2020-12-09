@@ -5,7 +5,7 @@ metadata:
   namespace: openshift-marketplace
 spec:
   displayName: Jenkins Operator
-  image: quay.io/redhat-developer/openshift-jenkins-operator-index:0.0.0 
+  image: registry-proxy.engineering.redhat.com/rh-osbs/iib:30198
   publisher: "Jenkins Community"
   sourceType: grpc
   updateStrategy:

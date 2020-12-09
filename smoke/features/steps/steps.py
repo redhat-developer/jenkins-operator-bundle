@@ -18,6 +18,7 @@ If we need to install an operator manually using the cli
 
 # Path to the yaml files
 scripts_dir = os.getenv('OUTPUT_DIR')
+# jenkins_crd = './manifests/jenkins-operator/0.7.0/'
 catalogsource = './smoke/samples/catalog-source.yaml'
 operatorgroup = os.path.join(scripts_dir,'operator-group.yaml')
 subscription = os.path.join(scripts_dir,'subscription.yaml')
@@ -85,10 +86,10 @@ def createSubsObject(context):
 def verifycsv(context):
     print('---> Getting the resources')
     time.sleep(90)
-    if not 'jenkins-operator' in oc.search_resource_in_namespace('csv','jenkins-operator',current_project):
+    if not 'jenkins-operator.0.7.0' in oc.search_resource_in_namespace('csv','jenkins-operator.0.7.0',current_project):
         raise AssertionError
     else:
-        res = oc.search_resource_in_namespace('csv','jenkins-operator',current_project)
+        res = oc.search_resource_in_namespace('csv','jenkins-operator.0.7.0',current_project)
         print(res)
 
 
@@ -132,7 +133,7 @@ def verifyoperatorpod(context):
         else:
             raise AssertionError
 
-@given(u'we jenkins operator is installed')
+@given(u'Jenkins operator is installed')
 def verifyoperator(context):
     verifyoperatorpod(context)
     
@@ -149,7 +150,7 @@ def checkjenkinspod(context):
 
 @then(u'We check for the route')
 def checkroute(context):
-    operator_name = 'jenkins-example'
+    operator_name = 'jenkins-simple'
     time.sleep(30)
     route = oc.get_route_host(operator_name,current_project)
     url = 'http://'+str(route)
