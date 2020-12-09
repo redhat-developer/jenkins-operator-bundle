@@ -9,4 +9,4 @@ spec:
   name: openshift-jenkins-operator
   source: jenkins-operator
   sourceNamespace: openshift-marketplace
-  startingCSV: jenkins-operator.v0.5.0
+  startingCSV: jenkins-operator.0.7.0

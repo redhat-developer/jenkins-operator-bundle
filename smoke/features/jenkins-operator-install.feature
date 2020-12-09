@@ -8,7 +8,7 @@ Feature: Install jenkins operator
     Given Project [TEST_NAMESPACE] is used
 
   Scenario: Install jenkins instance
-    Given we jenkins operator is installed
+    Given Jenkins operator is installed
     When we create the jenkins instance using jenkins.yaml
     Then We check for the jenkins-example pod status
     And We check for the route
