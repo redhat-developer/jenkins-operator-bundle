@@ -23,6 +23,9 @@ catalogsource = './smoke/samples/catalog-source.yaml'
 operatorgroup = os.path.join(scripts_dir,'operator-group.yaml')
 subscription = os.path.join(scripts_dir,'subscription.yaml')
 jenkins = os.path.join(scripts_dir,'jenkins.yaml')
+deploy_pod = "jenkins-1-deploy"
+samplebclst = ['sample-pipeline','nodejs-mongodb-example']
+samplepipeline = "https://raw.githubusercontent.com/openshift/origin/master/examples/jenkins/pipeline/samplepipeline.yaml"
 # variables needed to get the resource status
 current_project = ''
 config.load_kube_config()
@@ -159,3 +162,100 @@ def checkroute(context):
     
     if len(url) <= 0:
         raise AssertionError
+
+@given(u'The jenkins pod is up and runnning')
+def checkJenkins(context):
+    time.sleep(30)
+    podStatus = {}
+    status = ""
+    pods = v1.list_namespaced_pod(current_project)
+    for i in pods.items:
+        print("Getting pod list")
+        print(i.status.pod_ip)
+        print(i.metadata.name)
+        print(i.status.phase)
+        podStatus[i.metadata.name] = i.status.phase
+    for pod in podStatus.keys():
+        status = podStatus[pod]
+        if 'Running' in status:
+            print("still checking pod status")
+            print(pod)
+            print(podStatus[pod])
+        elif 'Succeeded' in status:
+            print("checking pod status")
+            print(pod)
+            print(podStatus[pod])
+        else:
+            raise AssertionError
+
+
+@when(u'The user enters new-app command with sample-pipeline')
+def createPipeline(context):
+    # bclst = ['sample-pipeline','nodejs-mongodb-example']
+    res = oc.new_app_from_file(samplepipeline,current_project)
+    for item, value in enumerate(samplebclst):
+        if 'sample-pipeline' in oc.search_resource_in_namespace('bc',value, current_project):
+            print('Buildconfig sample-pipeline created')
+        elif 'nodejs-mongodb-example' in oc.search_resource_in_namespace('bc',value,current_project):
+            print('Buildconfig nodejs-mongodb-example created')
+        else:
+            raise AssertionError
+    print(res)
+
+
+@then(u'Trigger the build using oc start-build')
+def startbuild(context):
+    for item,value in enumerate(samplebclst):
+        res = oc.start_build(value,current_project)
+        if not value in res:
+            raise AssertionError
+        else:
+            print(res)
+
+
+@then(u'nodejs-mongodb-example pod must come up')
+def check_app_pod(context):
+    time.sleep(120)
+    podStatus = {}
+    podSet = set()
+    bcdcSet = set()
+    pods = v1.list_namespaced_pod(current_project)
+    for i in pods.items:
+        podStatus[i.metadata.name] = i.status.phase
+        podSet.add(i.metadata.name)
+    
+    for items in podSet:
+        if 'build' in items:
+           bcdcSet.add(items)
+        elif 'deploy' in items:
+            bcdcSet.add(items)
+
+    app_pods = podSet.difference(bcdcSet)
+    for items in app_pods:
+        print('Getting pods')
+        print(items)
+    
+    for items in app_pods:
+        for pod in podStatus.keys():
+            status = podStatus[items]
+            if not 'Running' in status:
+                raise AssertionError
+    print('---> App pods are ready')
+
+@then(u'route nodejs-mongodb-example must be created and be accessible')
+def connectApp(context):
+    print('Getting application route/url')
+    app_name = 'nodejs-mongodb-example'
+    time.sleep(30)
+    route = oc.get_route_host(app_name,current_project)
+    url = 'http://'+str(route)
+    print('--->App url:')
+    print(url)
+    http = urllib3.PoolManager()
+    res = http.request('GET', url)
+    connection_status = res.status
+    if connection_status == 200:
+        print('---> Application is accessible via the route')
+        print(url)
+    else:
+        raise Exception
