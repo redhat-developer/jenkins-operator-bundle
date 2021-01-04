@@ -1,0 +1,17 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    k8s-app: jenkins-operator
+  name: jenkins-operator
+spec:
+  jobLabel: jenkins-operator
+  namespaceSelector:
+    any: true
+  endpoints:
+  - path: /metrics
+    port: metrics
+    scheme: http
+  selector:
+    matchLabels:
+      k8s-app: jenkins-operator
