@@ -524,6 +524,18 @@ spec:
         - apiGroups:
             - jenkins.io
           resources:
+            - jenkinsimages/finalizers
+          verbs:
+            - create
+            - delete
+            - get
+            - list
+            - patch
+            - update
+            - watch
+        - apiGroups:
+            - jenkins.io
+          resources:
             - restores
           verbs:
             - create
