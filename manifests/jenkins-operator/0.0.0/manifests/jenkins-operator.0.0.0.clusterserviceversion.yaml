@@ -212,21 +212,70 @@ spec:
                 resources: {}
               serviceAccountName: jenkins-operator
       clusterPermissions:
-      - rules:
-        - apiGroups:
-          - '*'
-          resources:
-          - '*'
-          verbs:
-          - get
-          - list
-          - watch
-        - nonResourceURLs:
-          - '*'
-          verbs:
-          - get
-          - list
-        serviceAccountName: jenkins-operator
+        - rules:
+            - apiGroups:
+                - apps
+                - apps.openshift.io
+                - batch
+                - ""
+                - extensionsnetworking.k8s.io
+                - packages.operators.coreos.com
+                - policy
+                - project.openshift.io
+                - quota.openshift.io
+                - rbac.authorization.k8s.io
+                - template.openshift.io
+                - route.openshift.io
+                - monitoring.coreos.com
+              resources:
+                - '*'
+              verbs:
+                - '*'
+            - apiGroups:
+                - jenkins.io
+              resources:
+                - jenkins
+                - jenkins/status
+                - jenkins/finalizers
+              verbs:
+                - '*'
+            - apiGroups:
+                - jenkins.io
+              resources:
+                - backups
+                - backups/status
+                - backupconfigs
+                - backupconfigs/status
+              verbs:
+                - '*'
+            - apiGroups:
+                - jenkins.io
+              resources:
+                - jenkinsimages
+                - jenkinsimages/status
+                - jenkinsimages/finalizers
+              verbs:
+                - '*'
+            - apiGroups:
+                - jenkins.io
+              resources:
+                - restores
+                - restores/status
+              verbs:
+                - '*'
+            - apiGroups:
+                - authentication.k8s.io
+              resources:
+                - tokenreviews
+              verbs:
+                - create
+            - apiGroups:
+                - authorization.k8s.io
+              resources:
+                - subjectaccessreviews
+              verbs:
+                - create
+          serviceAccountName: jenkins-operator
       permissions:
       - rules:
         - apiGroups:
