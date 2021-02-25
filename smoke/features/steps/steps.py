@@ -89,10 +89,10 @@ def createSubsObject(context):
 def verifycsv(context):
     print('---> Getting the resources')
     time.sleep(90)
-    if not 'jenkins-operator.0.7.0' in oc.search_resource_in_namespace('csv','jenkins-operator.0.7.0',current_project):
+    if not 'jenkins-operator.0.0.0' in oc.search_resource_in_namespace('csv','jenkins-operator.0.0.0',current_project):
         raise AssertionError
     else:
-        res = oc.search_resource_in_namespace('csv','jenkins-operator.0.7.0',current_project)
+        res = oc.search_resource_in_namespace('csv','jenkins-operator.0.0.0',current_project)
         print(res)
 
 
