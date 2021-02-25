@@ -4,9 +4,9 @@ metadata:
   name: jenkins-operator
   namespace: PROJECT
 spec:
-  channel: alpha
+  channel: "4.7"
   installPlanApproval: Automatic
-  name: openshift-jenkins-operator
+  name: jenkins-operator
   source: jenkins-operator
   sourceNamespace: openshift-marketplace
-  startingCSV: jenkins-operator.0.7.0
+  startingCSV: jenkins-operator.0.0.0
