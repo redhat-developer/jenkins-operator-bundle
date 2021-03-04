@@ -45,7 +45,7 @@ As a user of Jenkins Operator
   Scenario: Install jenkins instance
     Given Jenkins operator is installed
     When we create the jenkins instance using jenkins.yaml
-    Then We check for the jenkins-example pod status
+    Then We check for the jenkins-simple pod status
     And We check for the route
 
   Scenario: Deploy sample application on openshift
@@ -63,3 +63,4 @@ As a user of Jenkins Operator
 - make smoke
 ```
 [![Container Image Repository on Quay](https://quay.io/repository/redhat-developer/openshift-jenkins-operator-index/status "Operator Index Image Repository on Quay")](https://quay.io/repository/redhat-developer/openshift-jenkins-operator-index)
+
