@@ -89,10 +89,10 @@ def createSubsObject(context):
 def verifycsv(context):
     print('---> Getting the resources')
     time.sleep(90)
-    if not 'jenkins-operator.0.7.0' in oc.search_resource_in_namespace('csv','jenkins-operator.0.7.0',current_project):
+    if not 'jenkins-operator.0.0.0' in oc.search_resource_in_namespace('csv','jenkins-operator.0.0.0',current_project):
         raise AssertionError
     else:
-        res = oc.search_resource_in_namespace('csv','jenkins-operator.0.7.0',current_project)
+        res = oc.search_resource_in_namespace('csv','jenkins-operator.0.0.0',current_project)
         print(res)
 
 
@@ -127,7 +127,7 @@ def verifyoperatorpod(context):
             raise AssertionError
 
     print('waiting to get pod status')
-    time.sleep(60)
+    time.sleep(30)
     for pod in podStatus.keys():
         status = podStatus[pod]
         if 'Running' in status:
@@ -147,14 +147,14 @@ def createinstance(context):
     print(res)
 
 
-@then(u'We check for the jenkins-example pod status')
+@then(u'We check for the jenkins-simple pod status')
 def checkjenkinspod(context):
     verifyoperatorpod(context)
 
 @then(u'We check for the route')
 def checkroute(context):
     operator_name = 'jenkins-simple'
-    time.sleep(30)
+    time.sleep(90)
     route = oc.get_route_host(operator_name,current_project)
     url = 'http://'+str(route)
     print('--->App url:')

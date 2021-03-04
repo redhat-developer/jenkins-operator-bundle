@@ -63,3 +63,4 @@ As a user of Jenkins Operator
 - make smoke
 ```
 [![Container Image Repository on Quay](https://quay.io/repository/redhat-developer/openshift-jenkins-operator-index/status "Operator Index Image Repository on Quay")](https://quay.io/repository/redhat-developer/openshift-jenkins-operator-index)
+
