@@ -203,3 +203,4 @@ class Openshift(object):
                     time.sleep(5)
         exit_code | should.be_equal_to(0).desc(f'Exit code should be 0:\n OUTPUT:\n{output}')
         return output.rstrip("\n")
+

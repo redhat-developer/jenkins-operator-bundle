@@ -22,10 +22,12 @@ scripts_dir = os.getenv('OUTPUT_DIR')
 catalogsource = './smoke/samples/catalog-source.yaml'
 operatorgroup = os.path.join(scripts_dir,'operator-group.yaml')
 subscription = os.path.join(scripts_dir,'subscription.yaml')
-jenkins = os.path.join(scripts_dir,'jenkins.yaml')
+jenkins = os.path.join(scripts_dir,'jenkins_with_backup_enabled.yaml')
+backup = os.path.join(scripts_dir,'backup.yaml')
 deploy_pod = "jenkins-1-deploy"
 samplebclst = ['sample-pipeline','nodejs-mongodb-example']
 samplepipeline = "https://raw.githubusercontent.com/openshift/origin/master/examples/jenkins/pipeline/samplepipeline.yaml"
+default_jenkins_pod = ""
 # variables needed to get the resource status
 current_project = ''
 config.load_kube_config()
@@ -141,7 +143,7 @@ def verifyoperator(context):
     verifyoperatorpod(context)
     
 
-@when(u'we create the jenkins instance using jenkins.yaml')
+@when(u'we create the jenkins instance using jenkins_with_backup_enabled.yaml')
 def createinstance(context):
     res = oc.oc_create_from_yaml(jenkins)
     print(res)
@@ -149,7 +151,19 @@ def createinstance(context):
 
 @then(u'We check for the jenkins-simple pod status')
 def checkjenkinspod(context):
-    verifyoperatorpod(context)
+    time.sleep(90)
+    pods = oc.get_pod_lst(current_project)
+    global  default_jenkins_pod
+    for pod in pods:
+        if 'jenkins-simple' in pod:
+          default_jenkins_pod = pod
+    print('Getting default jenkins pod name-')
+    print(default_jenkins_pod)
+    containerState = oc.get_resource_info_by_jsonpath('pods',default_jenkins_pod,current_project,json_path='{.status.containerStatuses[*].ready}')
+    print(containerState)
+    if 'false' in containerState:
+        raise AssertionError
+    # verifyoperatorpod(context)
 
 @then(u'We check for the route')
 def checkroute(context):

@@ -31,7 +31,7 @@ echo "Logs directory created at "{$LOGS_DIR/smoke}
 # -- Set namespace for subscription.yaml & operator-group.yaml file , set the TEST_NAMESPACE as current project
 sed "s|PROJECT|${TEST_NAMESPACE}|g" smoke/samples/subscription.yaml > $OUTPUT_DIR/subscription.yaml
 sed "s|PROJECT|${TEST_NAMESPACE}|g" smoke/samples/operator-group.yaml > $OUTPUT_DIR/operator-group.yaml
-sed "s|PROJECT|${TEST_NAMESPACE}|g" smoke/samples/jenkins.yaml > $OUTPUT_DIR/jenkins.yaml
+sed "s|PROJECT|${TEST_NAMESPACE}|g" smoke/samples/jenkins_with_backup_enabled.yaml > $OUTPUT_DIR/jenkins_with_backup_enabled.yaml
 
 # -- Setting the project
 oc project ${TEST_NAMESPACE}
