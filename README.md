@@ -19,9 +19,6 @@ As a user of Jenkins Operator
         - create an OperatorGroup
         - create the Subscription object
 
-  Background:
-    Given Project [TEST_NAMESPACE] is used
-
   Scenario: Deploy Jenkins Operator on operator hub
     Given we have a openshift cluster
     When we create the catalog source using catalog-source.yaml
@@ -38,10 +35,6 @@ Feature 2: Install jenkins operator
 As a user of Jenkins Operator
       I want to install a jenkins instance & trigger my jobs 
         
-
-  Background:
-    Given Project [TEST_NAMESPACE] is used
-
   Scenario: Install jenkins instance
     Given Jenkins operator is installed
     When we create the jenkins instance using jenkins.yaml
@@ -55,7 +48,18 @@ As a user of Jenkins Operator
       Then nodejs-mongodb-example pod must come up
       And route nodejs-mongodb-example must be created and be accessible
 ```
-
+Feature 3: Jenkins with backup enabled
+```
+As a user of Jenkins Operator
+      I want to have a jenkins instance with backup enabled
+      
+Scenario: Create jenkins with backup
+    Given All containers in the jenkins pod are running
+    When we check for the default backupconfig
+    Then We create backup object using backup.yaml
+    And We check for the backup object named example
+    Then We rsh into the backup container and check for the jenkins-backups folder contents
+```
 ## Run the Smoke Test
 
 ```
