@@ -22,10 +22,13 @@ scripts_dir = os.getenv('OUTPUT_DIR')
 catalogsource = './smoke/samples/catalog-source.yaml'
 operatorgroup = os.path.join(scripts_dir,'operator-group.yaml')
 subscription = os.path.join(scripts_dir,'subscription.yaml')
-jenkins = os.path.join(scripts_dir,'jenkins.yaml')
+backups = os.path.join(scripts_dir,'backups.txt')
+jenkins = os.path.join(scripts_dir,'jenkins_with_backup_enabled.yaml')
+backup = os.path.join(scripts_dir,'backup.yaml')
 deploy_pod = "jenkins-1-deploy"
 samplebclst = ['sample-pipeline','nodejs-mongodb-example']
 samplepipeline = "https://raw.githubusercontent.com/openshift/origin/master/examples/jenkins/pipeline/samplepipeline.yaml"
+default_jenkins_pod = ''
 # variables needed to get the resource status
 current_project = ''
 config.load_kube_config()
@@ -33,6 +36,13 @@ v1 = client.CoreV1Api()
 oc = Openshift()
 
 podStatus = {}
+
+def check(key):
+    with open(backups) as f:
+            if key in f.read():
+                return "found"
+            else:
+                return "not found"
 
 
 # STEP
@@ -141,7 +151,7 @@ def verifyoperator(context):
     verifyoperatorpod(context)
     
 
-@when(u'we create the jenkins instance using jenkins.yaml')
+@when(u'we create the jenkins instance using jenkins_with_backup_enabled.yaml')
 def createinstance(context):
     res = oc.oc_create_from_yaml(jenkins)
     print(res)
@@ -149,7 +159,18 @@ def createinstance(context):
 
 @then(u'We check for the jenkins-simple pod status')
 def checkjenkinspod(context):
-    verifyoperatorpod(context)
+    time.sleep(90)
+    pods = v1.list_namespaced_pod(current_project)
+    global  default_jenkins_pod
+    for pod in pods.items:
+        if 'jenkins-simple' in pod.metadata.name:
+            default_jenkins_pod = pod.metadata.name
+    print('Getting default jenkins pod name-')
+    print(default_jenkins_pod)
+    containerState = oc.get_resource_info_by_jsonpath('pods',default_jenkins_pod,current_project,json_path='{.status.containerStatuses[*].ready}')
+    print(containerState)
+    if 'false' in containerState:
+        raise AssertionError
 
 @then(u'We check for the route')
 def checkroute(context):
@@ -165,34 +186,14 @@ def checkroute(context):
 
 @given(u'The jenkins pod is up and runnning')
 def checkJenkins(context):
-    time.sleep(30)
-    podStatus = {}
-    status = ""
-    pods = v1.list_namespaced_pod(current_project)
-    for i in pods.items:
-        print("Getting pod list")
-        print(i.status.pod_ip)
-        print(i.metadata.name)
-        print(i.status.phase)
-        podStatus[i.metadata.name] = i.status.phase
-    for pod in podStatus.keys():
-        status = podStatus[pod]
-        if 'Running' in status:
-            print("still checking pod status")
-            print(pod)
-            print(podStatus[pod])
-        elif 'Succeeded' in status:
-            print("checking pod status")
-            print(pod)
-            print(podStatus[pod])
-        else:
-            raise AssertionError
+    checkjenkinspod(context)
 
 
 @when(u'The user enters new-app command with sample-pipeline')
 def createPipeline(context):
     # bclst = ['sample-pipeline','nodejs-mongodb-example']
     res = oc.new_app_from_file(samplepipeline,current_project)
+    time.sleep(30)
     for item, value in enumerate(samplebclst):
         if 'sample-pipeline' in oc.search_resource_in_namespace('bc',value, current_project):
             print('Buildconfig sample-pipeline created')
@@ -205,12 +206,8 @@ def createPipeline(context):
 
 @then(u'Trigger the build using oc start-build')
 def startbuild(context):
-    for item,value in enumerate(samplebclst):
-        res = oc.start_build(value,current_project)
-        if not value in res:
-            raise AssertionError
-        else:
-            print(res)
+    res = oc.start_build('sample-pipeline',current_project)
+    print(res)
 
 
 @then(u'nodejs-mongodb-example pod must come up')
@@ -259,3 +256,50 @@ def connectApp(context):
         print(url)
     else:
         raise Exception
+
+@given(u'All containers in the jenkins pod are running')
+def checkJenkinsPodConatiners(context):
+    checkjenkinspod(context)
+
+
+@when(u'we check for the default backupconfig')
+def checkBackupConfig(context):
+    print('Getting the backupconfig')
+    if not 'default' in oc.search_resource_in_namespace('backupconfig','default', current_project):
+        raise AssertionError
+    else :
+        res = oc.get_resource_lst('backupconfig',current_project)
+        print(res)
+
+
+@then(u'We create backup object using backup.yaml')
+def createBackupObject(context):
+    res = oc.oc_create_from_yaml(backup)
+
+
+@then(u'We check for the backup object named example')
+def checkBackupObject(context):
+    if not 'example' in oc.search_resource_in_namespace('backup','example', current_project):
+        raise AssertionError
+    else:
+        res = oc.search_resource_in_namespace('backup','example', current_project)
+        print(res)
+
+
+@then(u'We rsh into the backup container and check for the jenkins-backups folder contents')
+def checkBackupFolder(context):
+    keys = ['plugins', 'jobs', 'credentials.xml', 'config.xml']
+    locks = []
+    container_cmd = 'ls /jenkins-backups/example > ' + backups
+    oc.exec_container_in_pod('backup',default_jenkins_pod,container_cmd)
+    for key in keys:
+        lock = check(key)
+        locks.append(lock)
+    if "not found" in locks:
+        raise AssertionError
+    else:
+        with open(backups) as r:
+            contents = r.readlines()
+            for content in contents:
+                print(content)
+

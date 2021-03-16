@@ -1,0 +1,11 @@
+apiVersion: jenkins.io/v1alpha2
+kind: Jenkins
+metadata:
+  name: simple
+  namespace: PROJECT
+spec:
+  master:
+    containers:
+      - name: jenkins
+        image: 'quay.io/redhat-developer/origin-jenkins:4.7-stable'
+  backupEnabled: true
