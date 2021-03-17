@@ -18,7 +18,7 @@ ${PYTHON_VENV_DIR}/bin/pip install --upgrade pip
 # -- Generating a new namespace name
 echo "test-namespace-$(uuidgen | tr '[:upper:]' '[:lower:]' | head -c 8)" > ${OUTPUT_DIR}/test-namespace
 export TEST_NAMESPACE=$(cat ${OUTPUT_DIR}/test-namespace)
-echo "Assigning value to varibale TEST_NAMESPACE:"${TEST_NAMESPACE}
+echo "Assigning value to variable TEST_NAMESPACE:"${TEST_NAMESPACE}
 # -- Do clean up & create namespace
 echo "Starting cleanup"
 kubectl delete namespace ${TEST_NAMESPACE} --timeout=45s --wait
