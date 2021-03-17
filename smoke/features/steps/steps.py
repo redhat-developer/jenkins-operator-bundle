@@ -137,7 +137,7 @@ def verifyoperatorpod(context):
             raise AssertionError
 
     print('waiting to get pod status')
-    time.sleep(30)
+    time.sleep(60)
     for pod in podStatus.keys():
         status = podStatus[pod]
         if 'Running' in status:
@@ -159,7 +159,7 @@ def createinstance(context):
 
 @then(u'We check for the jenkins-simple pod status')
 def checkjenkinspod(context):
-    time.sleep(90)
+    time.sleep(180)
     pods = v1.list_namespaced_pod(current_project)
     global  default_jenkins_pod
     for pod in pods.items:
@@ -212,7 +212,7 @@ def startbuild(context):
 
 @then(u'nodejs-mongodb-example pod must come up')
 def check_app_pod(context):
-    time.sleep(120)
+    time.sleep(180)
     podStatus = {}
     podSet = set()
     bcdcSet = set()
