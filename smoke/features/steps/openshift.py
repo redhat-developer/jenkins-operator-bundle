@@ -212,6 +212,16 @@ class Openshift(object):
             return output
         return None
     
+    def oc_process_template(self,file_path):
+        cmd = f'oc process -f {file_path}|oc create -f -'
+        output, exit_status = self.cmd.run(cmd)
+        print(f"Proccesing {file_path} template with : {output}")
+        if exit_status == 0:
+            return output
+        return None
+
+
+    
             
         
 
