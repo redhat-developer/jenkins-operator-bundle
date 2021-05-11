@@ -25,6 +25,7 @@ subscription = os.path.join(scripts_dir,'subscription.yaml')
 backups = os.path.join(scripts_dir,'backups.txt')
 jenkins = os.path.join(scripts_dir,'jenkins_with_backup_enabled.yaml')
 backup = os.path.join(scripts_dir,'backup.yaml')
+maven_template ='./smoke/samples/agent_maven_template.yaml'
 deploy_pod = "jenkins-1-deploy"
 samplebclst = ['sample-pipeline','nodejs-mongodb-example']
 samplepipeline = "https://raw.githubusercontent.com/openshift/origin/master/examples/jenkins/pipeline/samplepipeline.yaml"
@@ -44,6 +45,10 @@ def check(key):
             else:
                 return "not found"
 
+def triggerbuild(buildconfig,namespace):
+    print('Triggering build: {buildconfig}')
+    res = oc.start_build(buildconfig,namespace)
+    print(res)
 
 # STEP
 
@@ -206,8 +211,7 @@ def createPipeline(context):
 
 @then(u'Trigger the build using oc start-build')
 def startbuild(context):
-    res = oc.start_build('sample-pipeline',current_project)
-    print(res)
+    triggerbuild('sample-pipeline',current_project)
 
 
 @then(u'nodejs-mongodb-example pod must come up')
@@ -303,3 +307,96 @@ def checkBackupFolder(context):
             for content in contents:
                 print(content)
 
+@when(u'The user create objects from the sample maven template by processing the template and piping the output to oc create')
+def createMavenTemplate(context):
+    res = oc.oc_process_template(maven_template)
+    print(res)
+
+@when(u'verify imagestream.image.openshift.io/openshift-jee-sample & imagestream.image.openshift.io/wildfly exist')
+def verifyImageStream(context):
+    if not 'openshift-jee-sample' in oc.search_resource_in_namespace('imagestream','openshift-jee-sample', current_project):
+        raise AssertionError
+    elif not 'wildfly' in oc.search_resource_in_namespace('imagestream','wildfly', current_project):
+        raise AssertionError
+    else:
+        res = oc.get_resource_lst('imagestream',current_project)
+        print(res)
+
+@when(u'verify buildconfig.build.openshift.io/openshift-jee-sample & buildconfig.build.openshift.io/openshift-jee-sample-docker exist')
+def verifyBuildConfig(context):
+    if not 'openshift-jee-sample' in oc.search_resource_in_namespace('buildconfig','openshift-jee-sample', current_project):
+        raise AssertionError
+    elif not 'openshift-jee-sample-docker' in oc.search_resource_in_namespace('buildconfig','openshift-jee-sample-docker', current_project):
+        raise AssertionError
+    else:
+        res = oc.get_resource_lst('buildconfig',current_project)
+        print(res)
+
+@when(u'verify deploymentconfig.apps.openshift.io/openshift-jee-sample is created')
+def verifyDeploymentConfig(context):
+    if not 'openshift-jee-sample' in oc.search_resource_in_namespace('deploymentconfig','openshift-jee-sample',current_project):
+        raise AssertionError
+    else:
+        res = oc.search_resource_in_namespace('deploymentconfig','openshift-jee-sample',current_project)
+        print(res)
+
+@when(u'verify service/openshift-jee-sample is created')
+def verifySvc(context):
+    if not 'openshift-jee-sample' in oc.search_resource_in_namespace('service','openshift-jee-sample',current_project):
+        raise AssertionError
+    else:
+        res = oc.search_resource_in_namespace('service','openshift-jee-sample',current_project)
+        print(res)
+
+@when(u'verify route.route.openshift.io/openshift-jee-sample is created')
+def verifyRoute(context):
+    if not 'openshift-jee-sample' in oc.search_resource_in_namespace('route','openshift-jee-sample',current_project):
+        raise AssertionError
+    else:
+        res = oc.search_resource_in_namespace('route','openshift-jee-sample',current_project)
+        print(res)
+    
+
+
+@then(u'Trigger the build using oc start-build openshift-jee-sample')
+def startBuild(context):
+    triggerbuild('openshift-jee-sample',current_project)
+    time.sleep(180)
+
+
+@then(u'verify the build status of openshift-jee-sample-docker build is Complete')
+def verifyDockerBuildStatus(context):
+    buildState = oc.get_resource_info_by_jsonpath('build','openshift-jee-sample-docker-1',current_project,json_path='{.status.phase}')
+    if not 'Complete' in buildState:
+        raise AssertionError
+    else:
+        print("Build openshift-jee-sample-docker-1 status:{buildState}")
+    
+
+@then(u'verify the build status of openshift-jee-sample build is Complete')
+def verifyJenkinsBuildStatus(context):
+    time.sleep(30)
+    buildState = oc.get_resource_info_by_jsonpath('build','openshift-jee-sample-1',current_project,json_path='{.status.phase}')
+    if not 'Complete' in buildState:
+        raise AssertionError
+    else:
+        print("Build openshift-jee-sample-1 status:{buildState}")
+
+
+@then(u'verify the JaveEE application is accessible via route openshift-jee-sample')
+def pingApp(context):
+    print('Getting application route/url')
+    app_name = 'openshift-jee-sample'
+    time.sleep(30)
+    route = oc.get_route_host(app_name,current_project)
+    url = 'http://'+str(route)
+    print('--->App url:')
+    print(url)
+    http = urllib3.PoolManager()
+    res = http.request('GET', url)
+    connection_status = res.status
+    if connection_status == 200:
+        print('---> Application is accessible via the route')
+        print(url)
+    else:
+        raise Exception
