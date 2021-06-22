@@ -5,3 +5,4 @@ out
 .kube
 .idea
 smoke/features/steps/__pycache__
+.DS_Store
